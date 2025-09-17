@@ -1,12 +1,12 @@
 package com.ibs.tests;
 
-import com.ibs.asert.RegistrationAssertions;
+import com.ibs.asserts.RegistrationAssertions;
 import com.ibs.basetestclass.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import utill.ErrorType;
+import com.ibs.utill.enums.ErrorType;
 
 import java.util.stream.Stream;
 

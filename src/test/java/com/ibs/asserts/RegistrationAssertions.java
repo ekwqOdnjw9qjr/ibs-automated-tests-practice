@@ -1,7 +1,7 @@
-package com.ibs.asert;
+package com.ibs.asserts;
 
-import com.ibs.pages.RegisterPage;
-import utill.ErrorType;
+import com.ibs.pages.opencart.RegisterPage;
+import com.ibs.utill.enums.ErrorType;
 
 import static org.junit.jupiter.api.Assertions.*;
 

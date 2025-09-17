@@ -1,5 +1,6 @@
-package com.ibs.pages;
+package com.ibs.pages.opencart;
 
+import com.ibs.pages.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;

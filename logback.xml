@@ -1,0 +1,7 @@
+<configuration>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+    <logger name="com.ibs" level="DEBUG"/>
+</configuration>

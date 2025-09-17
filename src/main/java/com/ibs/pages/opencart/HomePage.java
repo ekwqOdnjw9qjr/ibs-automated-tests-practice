@@ -1,5 +1,7 @@
-package com.ibs.pages;
+package com.ibs.pages.opencart;
 
+import com.ibs.config.Config;
+import com.ibs.pages.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,7 +17,7 @@ public class HomePage extends BasePage {
     /**
      * URL главной страницы.
      */
-    private static final String HOME_PAGE_URL = "http://217.74.37.176/?route=common/home&language=ru-ru";
+    private static final String HOME_PAGE_URL = Config.getOpencartBaseUrl();
 
     /**
      * Кнопка "Личный кабинет" для открытия выпадающего меню.
