@@ -20,7 +20,7 @@ public class HomePage extends BasePage {
     /**
      * Кнопка "Личный кабинет" для открытия выпадающего меню.
      */
-    @FindBy(xpath = "(//span[@class='d-none d-md-inline'])[3]")
+    @FindBy(xpath = "//span[normalize-space(text())='Личный кабинет']")
     private WebElement openPersonalInfo;
 
     /**
@@ -49,7 +49,7 @@ public class HomePage extends BasePage {
     /**
      * Кликает по иконке "Личный кабинет" для вызова выпадающего меню.
      */
-    public void openRegisterXd() {
+    public void openPersonalInfo() {
         openPersonalInfo.click();
     }
 

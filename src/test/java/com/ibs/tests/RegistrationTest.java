@@ -3,103 +3,85 @@ package com.ibs.tests;
 import com.ibs.asert.RegistrationAssertions;
 import com.ibs.basetestclass.BaseTest;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import utill.ErrorType;
+
+import java.util.stream.Stream;
 
 
- class RegistrationTest extends BaseTest {
+class RegistrationTest extends BaseTest {
 
-    @Test
-    @DisplayName("Регистрация с некорректным E-mail адресом")
-     void registerWithInvalidEmailTest() {
-
-        RegistrationAssertions assertions = new RegistrationAssertions(registerPage);
-
-        homePage.openPage();
-
-        homePage.openRegisterXd();
-
-        homePage.openRegisterForm();
-
-        registerPage.setFirstNameField("Роман");
-
-        registerPage.setLastNameField("Романов");
-
-        registerPage.setEmailField("examplezxc&asd@gmail.com");
-
-        registerPage.setPasswordField("asdQWE123");
-
-        registerPage.setSubscribeToNews(true);
-
-        registerPage.setPrivacyPolicyCheckbox(true);
-
-        registerPage.clickContinueButton();
-
-        assertions.emailErrorShouldBeDisplayed()
-                .emailErrorShouldContain("E-Mail введен неправильно!")
-                .formShouldNotBeSubmitted();
-
+    static Stream<Arguments> invalidRegistrationData() {
+        return Stream.of(
+                Arguments.of("Роман", "Романов",
+                        "examplezxc&asd@gmail.com",
+                        "asdQWE123",
+                        ErrorType.EMAIL,
+                        "E-Mail введен неправильно!"),
+                Arguments.of("Роман", "Романов",
+                        "examplezxcasd@gmail.com",
+                        "           ",
+                        ErrorType.PASSWORD,
+                        "В пароле должно быть от 4 до 20 символов!")
+        );
     }
 
-    @Test
-    @DisplayName("Регистрация с именем на английском языке")
-     void registerWithEnglishFirstName() {
+    static Stream<Arguments> validRegistrationData() {
+        return Stream.of(
+                Arguments.of("Roman", "Романов",
+                        "test" + System.currentTimeMillis() + "@gmail.com",
+                        "asdQWE123","Ваша учетная запись создана!")
+        );
+    }
+
+    @ParameterizedTest(name = "email={2} | password={3}")
+    @MethodSource("invalidRegistrationData")
+    @DisplayName("Негативные сценарии регистрации")
+    void registerWithInvalidData(String firstName,String lastName,
+                                 String email,String password,ErrorType errorType,String expectedErrorMessage) {
 
         RegistrationAssertions assertions = new RegistrationAssertions(registerPage);
 
         homePage.openPage();
-
-        homePage.openRegisterXd();
-
+        homePage.openPersonalInfo();
         homePage.openRegisterForm();
 
-        registerPage.setFirstNameField("Roman");
-
-        registerPage.setLastNameField("Романов");
-
-        String uniqueEmail = "test" + System.currentTimeMillis() + "@gmail.com";
-        registerPage.setEmailField(uniqueEmail);
-
-        registerPage.setPasswordField("asdQWE123");
-
+        registerPage.setFirstNameField(firstName);
+        registerPage.setLastNameField(lastName);
+        registerPage.setEmailField(email);
+        registerPage.setPasswordField(password);
         registerPage.setSubscribeToNews(true);
-
         registerPage.setPrivacyPolicyCheckbox(true);
+        registerPage.clickContinueButton();
 
+        assertions.formShouldNotBeSubmitted()
+                .errorShouldContain(errorType, expectedErrorMessage);
+    }
+
+    @ParameterizedTest(name = "firstname={0}")
+    @MethodSource("validRegistrationData")
+    @DisplayName("Позитивные сценарии для регистрации")
+    void registerWithValidData(String firstName,String lastName,
+                                 String email,String password,String successPageContain) {
+
+        RegistrationAssertions assertions = new RegistrationAssertions(registerPage);
+
+        homePage.openPage();
+        homePage.openPersonalInfo();
+        homePage.openRegisterForm();
+
+        registerPage.setFirstNameField(firstName);
+        registerPage.setLastNameField(lastName);
+        registerPage.setEmailField(email);
+        registerPage.setPasswordField(password);
+        registerPage.setSubscribeToNews(true);
+        registerPage.setPrivacyPolicyCheckbox(true);
         registerPage.clickContinueButton();
 
         assertions.formShouldBeSubmitted()
-                .successPageShouldContain("Ваша учетная запись создана!");
-    }
-
-    @Test
-    @DisplayName("Регистрация с некорректным Паролем")
-     void registerWithInvalidPasswordTest() {
-
-        RegistrationAssertions assertions = new RegistrationAssertions(registerPage);
-
-        homePage.openPage();
-
-        homePage.openRegisterXd();
-
-        homePage.openRegisterForm();
-
-        registerPage.setFirstNameField("Роман");
-
-        registerPage.setLastNameField("Романов");
-
-        registerPage.setEmailField("examplezxcasd@gmail.com");
-
-        registerPage.setPasswordField("           ");
-
-        registerPage.setSubscribeToNews(true);
-
-        registerPage.setPrivacyPolicyCheckbox(true);
-
-        registerPage.clickContinueButton();
-
-        assertions.passwordErrorShouldBeDisplayed()
-                .passwordErrorShouldContain("В пароле должно быть от 4 до 20 символов!")
-                .formShouldNotBeSubmitted();
+                .successPageShouldContain(successPageContain);
 
     }
 

@@ -20,7 +20,8 @@ public class RegisterPage extends BasePage {
     private final By continueButton = By.xpath("//button[@type='submit']");
     private final By emailErrorText = By.id("error-email");
     private final By passwordErrorText = By.id("error-password");
-    private final By successPageText = By.xpath("(//div[@id='content']//h1)[1]");
+    private final By successPageText = By
+            .xpath("//div[@id='content']//h1[normalize-space()='Ваша учетная запись создана!']");
 
     /**
      * Конструктор страницы регистрации.
@@ -134,6 +135,7 @@ public class RegisterPage extends BasePage {
      *
      * @return Текущий URL.
      */
+    @Override
     public String getCurrentUrl() {
         return driver.getCurrentUrl();
     }

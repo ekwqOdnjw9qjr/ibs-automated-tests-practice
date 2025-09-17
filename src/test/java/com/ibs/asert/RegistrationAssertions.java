@@ -1,6 +1,8 @@
 package com.ibs.asert;
 
 import com.ibs.pages.RegisterPage;
+import utill.ErrorType;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -9,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class RegistrationAssertions {
     private final RegisterPage registerPage;
-
     /**
      * Конструктор класса.
      */
@@ -19,27 +20,37 @@ public class RegistrationAssertions {
 
     /**
      * Проверяет, что сообщение об ошибке для поля E-mail отображается.
-     *
-     * @return Текущий экземпляр {@link RegistrationAssertions} для вызова следующих проверок.
      */
-    public RegistrationAssertions emailErrorShouldBeDisplayed() {
+    public void emailErrorShouldBeDisplayed() {
         assertTrue(registerPage.isEmailErrorDisplayed(),
                 "Сообщение об ошибке для поля E-mail должно отображаться на странице.");
-        return this;
     }
-
     /**
      * Проверяет текст сообщения об ошибке для поля E-mail.
      *
      * @param expectedError Ожидаемый текст ошибки.
-     * @return Текущий экземпляр {@link RegistrationAssertions}.
      */
-    public RegistrationAssertions emailErrorShouldContain(String expectedError) {
+    public void emailErrorShouldContain(String expectedError) {
         assertEquals(registerPage.getEmailErrorText(), expectedError,
                 "Текст сообщения об ошибке для E-mail не соответствует ожидаемому.");
-        return this;
+    }
+    /**
+     * Проверяет, что сообщение об ошибке для поля "Пароль" отображается.
+     */
+    public void passwordErrorShouldBeDisplayed() {
+        assertTrue(registerPage.isPasswordErrorDisplayed(),
+                "Сообщение об ошибке для поля 'Пароль' должно отображаться на странице.");
     }
 
+    /**
+     * Проверяет текст сообщения об ошибке для поля "Пароль".
+     *
+     * @param expectedError Ожидаемый текст ошибки.
+     */
+    public void passwordErrorShouldContain(String expectedError) {
+        assertEquals(registerPage.getPasswordErrorText(), expectedError,
+                "Текст сообщения об ошибке для пароля не соответствует ожидаемому.");
+    }
     /**
      * Проверяет, что отправка формы не удалась и пользователь остался на странице регистрации.
      *
@@ -50,7 +61,6 @@ public class RegistrationAssertions {
                 "Отправка формы не должна была произойти, пользователь должен был остаться на странице регистрации.");
         return this;
     }
-
     /**
      * Проверяет, что форма была успешно отправлена и произошел переход на страницу успеха.
      *
@@ -61,7 +71,6 @@ public class RegistrationAssertions {
                 "Пользователь должен был быть перенаправлен на страницу успешной регистрации.");
         return this;
     }
-
     /**
      * Проверяет заголовок на странице успешной регистрации.
      *
@@ -73,25 +82,20 @@ public class RegistrationAssertions {
     }
 
     /**
-     * Проверяет, что сообщение об ошибке для поля "Пароль" отображается.
-     *
-     * @return Текущий экземпляр {@link RegistrationAssertions}.
+     * Универсальная проверка текста ошибки по типу поля
      */
-    public RegistrationAssertions passwordErrorShouldBeDisplayed() {
-        assertTrue(registerPage.isPasswordErrorDisplayed(),
-                "Сообщение об ошибке для поля 'Пароль' должно отображаться на странице.");
-        return this;
+    public void errorShouldContain(ErrorType type, String expectedText) {
+        switch (type) {
+            case EMAIL -> {
+                emailErrorShouldBeDisplayed();
+                emailErrorShouldContain(expectedText);
+            }
+            case PASSWORD -> {
+                passwordErrorShouldBeDisplayed();
+                passwordErrorShouldContain(expectedText);
+            }
+            default -> fail("Unknown ERROR: " + type);
+        }
     }
 
-    /**
-     * Проверяет текст сообщения об ошибке для поля "Пароль".
-     *
-     * @param expectedError Ожидаемый текст ошибки.
-     * @return Текущий экземпляр {@link RegistrationAssertions}.
-     */
-    public RegistrationAssertions passwordErrorShouldContain(String expectedError) {
-        assertEquals(registerPage.getPasswordErrorText(), expectedError,
-                "Текст сообщения об ошибке для пароля не соответствует ожидаемому.");
-        return this;
-    }
 }
