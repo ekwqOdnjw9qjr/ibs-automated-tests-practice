@@ -1,65 +1,38 @@
 package com.ibs.pages.opencart;
 
-import com.ibs.config.Config;
-import com.ibs.pages.BasePage;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
+import static com.codeborne.selenide.Condition.clickable;
+import static com.codeborne.selenide.Selenide.*;
 /**
  * @author Mironov Roman
- * Page Object, представляющий главную страницу приложения.
+ * Страница главного меню OpenCart.
  */
-public class HomePage extends BasePage {
+public class HomePage {
+
+    private final SelenideElement myAccountDropdown = $x("//span[normalize-space(text())='Личный кабинет']");
+    private final SelenideElement registerLink = $x("//a[@class='dropdown-item' and text()='Регистрация']");
 
     /**
-     * URL главной страницы.
-     */
-    private static final String HOME_PAGE_URL = Config.getOpencartBaseUrl();
-
-    /**
-     * Кнопка "Личный кабинет" для открытия выпадающего меню.
-     */
-    @FindBy(xpath = "//span[normalize-space(text())='Личный кабинет']")
-    private WebElement openPersonalInfo;
-
-    /**
-     * Ссылка "Регистрация" в выпадающем меню личного кабинета.
-     */
-    @FindBy(xpath = "//a[@class='dropdown-item' and text()='Регистрация']")
-    private WebElement registerFormLink;
-
-    /**
-     * Конструктор страницы.
+     * Открывает главную страницу по-указанному URL.
      *
-     * @param driver Экземпляр WebDriver.
+     * @param url адрес главной страницы.
      */
-    public HomePage(WebDriver driver) {
-        super(driver);
-        PageFactory.initElements(driver, this);
+    @Step("Открыть главную страницу Opencart")
+    public void openPage(String url) {
+        open(url);
     }
 
     /**
-     * Открывает главную страницу в браузере.
+     * Переходит на страницу регистрации через меню "Личный кабинет".
+     *
+     * @return объект страницы регистрации {@link RegisterPage}.
      */
-    public void openPage() {
-        driver.get(HOME_PAGE_URL);
-    }
-
-    /**
-     * Кликает по иконке "Личный кабинет" для вызова выпадающего меню.
-     */
-    public void openPersonalInfo() {
-        openPersonalInfo.click();
-    }
-
-    /**
-     * Кликает по ссылке "Регистрация" в открытом выпадающем меню.
-     */
-    public void openRegisterForm() {
-        wait.until(ExpectedConditions.elementToBeClickable(registerFormLink));
-        registerFormLink.click();
+    @Step("Перейти на страницу регистрации")
+    public RegisterPage goToRegistration() {
+        myAccountDropdown.click();
+        registerLink.shouldBe(clickable).click();
+        return new RegisterPage();
     }
 }

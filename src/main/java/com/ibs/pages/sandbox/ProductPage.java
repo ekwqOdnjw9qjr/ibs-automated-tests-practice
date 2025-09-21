@@ -1,64 +1,37 @@
 package com.ibs.pages.sandbox;
 
-import com.ibs.pages.BasePage;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.Select;
+import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selectors.byText;
 /**
  * @author Mironov Roman
- * Page Object, представляющий страницу для создания товаров.
+ * Страница для работы с товарами в Sandbox.
  */
-public class ProductPage extends BasePage {
+public class ProductPage {
 
-
-    private By addButton = By.xpath("//button[@type='button' and contains(@class, 'btn-primary') " +
-            "and @data-target='#editModal' and text()='Добавить']");
-    private By nameField = By.id("name");
-    private By typeField = By.id("type");
-    private By exoticCheckbox = By.id("exotic");
-    private By saveButton = By.id("save");
-    /**
-     * Конструктор страницы продукта.
-     */
-    public ProductPage(WebDriver driver) {
-        super(driver);
-    }
+    private final SelenideElement addButton = $(byText("Добавить"));
+    private final SelenideElement nameField = $("#name");
+    private final SelenideElement typeDropdown = $("#type");
+    private final SelenideElement exoticCheckbox = $("#exotic");
+    private final SelenideElement saveButton = $("#save");
 
     /**
-     * Нажимает кнопку "Добавить продукт".
-     */
-    public void clickAdd() {
-        click(addButton);
-    }
-
-    /**
-     * Заполняет поле названия продукта.
+     * Добавляет новый товар с указанными параметрами.
      *
-     * @param name название продукта.
+     * @param name     название товара.
+     * @param type     тип товара.
+     * @param isExotic флаг экзотичности.
      */
-    public void setNameField(String name) {
-        set(nameField, name);
-    }
-
-    /**
-     * Устанавливает тип продукта из выпадающего списка.
-     *
-     * @param type значение типа продукта.
-     */
-    public void setTypeField(String type) {
-        Select typeSelect = new Select(driver.findElement(typeField));
-        typeSelect.selectByValue(type);
-    }
-    /**
-     * Устанавливает чекбокс "Экзотический продукт".
-     */
-    public void exoticCheckbox(boolean exotic) {
-        setCheckbox(exoticCheckbox, exotic);
-    }
-    /**
-     * * Сохраняет продукт, нажимая кнопку "Сохранить".
-     */
-    public void save() {
-        click(saveButton);
+    @Step("я добавляю новый товар")
+    public void addNewProduct(String name, String type, boolean isExotic) {
+        addButton.click();
+        nameField.setValue(name);
+        typeDropdown.selectOptionByValue(type);
+        if (isExotic && !exoticCheckbox.isSelected()) {
+            exoticCheckbox.click();
+        }
+        saveButton.click();
     }
 }

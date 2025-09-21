@@ -1,57 +1,41 @@
 package com.ibs.pages.sandbox;
 
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.ibs.config.Config;
-import com.ibs.pages.BasePage;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+
+import static com.codeborne.selenide.Selenide.$;
 /**
  * @author Mironov Roman
- * Page Object, представляющий главную страницу приложения.
+ * Стартовая страница Sandbox.
  */
-public class StartPage extends BasePage {
+public class StartPage {
+
     private static final String HOME_PAGE_URL = Config.getSandboxBaseUrl();
-
-    public StartPage(WebDriver driver) {
-        super(driver);
-        PageFactory.initElements(driver, this);
-    }
+    private final SelenideElement openSandboxButton = $("#navbarDropdown");
+    private final SelenideElement productsLink = $("a[href='/food'].dropdown-item");
 
     /**
-     * Кнопка "Песочница" для открытия выпадающего меню.
-     */
-    @FindBy(id = "navbarDropdown")
-    private WebElement openSandbox;
-
-    /**
-     * Ссылка "Товары" в выпадающем меню песочницы.
-     */
-    @FindBy(xpath = "//a[@href='/food' and contains(@class, 'dropdown-item')]")
-    private WebElement openProductForm;
-
-
-    /**
-     * Открывает главную страницу в браузере.
+     * Открывает стартовую страницу Sandbox.
      */
     public void openPage() {
-        driver.get(HOME_PAGE_URL);
+        Selenide.open(HOME_PAGE_URL);
     }
 
     /**
-     * Кликает по кнопке "Песочница" для вызова выпадающего меню.
+     * Открывает раздел Sandbox.
      */
     public void openSandbox() {
-        wait.until(ExpectedConditions.elementToBeClickable(openSandbox));
-        openSandbox.click();
+        openSandboxButton.click();
     }
 
     /**
-     * Кликает по ссылке "Товары" в открытом выпадающем меню.
+     * Переходит к странице продуктов.
+     *
+     * @return объект страницы продуктов {@link ProductPage}.
      */
-    public void openProductForm() {
-        wait.until(ExpectedConditions.elementToBeClickable(openProductForm));
-        openProductForm.click();
+    public ProductPage goToProducts() {
+        productsLink.click();
+        return new ProductPage();
     }
 }
