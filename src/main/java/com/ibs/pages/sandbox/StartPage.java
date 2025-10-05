@@ -1,5 +1,6 @@
 package com.ibs.pages.sandbox;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.ibs.config.Config;
@@ -26,7 +27,7 @@ public class StartPage {
      * Открывает раздел Sandbox.
      */
     public void openSandbox() {
-        openSandboxButton.click();
+        openSandboxButton.shouldBe(Condition.clickable).click();
     }
 
     /**

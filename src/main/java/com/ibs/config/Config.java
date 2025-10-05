@@ -1,6 +1,5 @@
 package com.ibs.config;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -52,6 +51,27 @@ public class Config {
     }
 
     /**
+     * Получает URL страницы для входа в панель администрирования Opencart.
+     */
+    public static String getOpencartAdminUrl() {
+        return get("opencart.admin.login.url");
+    }
+
+    /**
+     * Получает логин пользователя для входа в панель администрирования Opencart.
+     */
+    public static String getAdminLogin() {
+        return get("admin.login");
+    }
+
+    /**
+     * Получает пароль пользователя для входа в панель администрирования Opencart.
+     */
+    public static String getAdminPassword() {
+        return get("admin.password");
+    }
+
+    /**
      * Получает URL песочницы (sandbox).
      */
     public static String getSandboxBaseUrl() {
@@ -77,6 +97,35 @@ public class Config {
      */
     public static String getDbPassword() {
         return get("db.password");
+    }
+
+    /**
+     * Получает название браузера.
+     */
+    public static String getBrowser() {
+        String browser = System.getProperty("type.browser");
+        if (browser != null && !browser.isEmpty()) {
+            return browser;
+        }
+        return get("type.browser");
+    }
+
+    /**
+     * Получает URL Selenoid.
+     */
+    public static String getSelenoidUrl() {
+        return get("selenoid.url");
+    }
+
+    /**
+     * Получает тип драйвера.
+     */
+    public static String getDriverType() {
+        String driver = System.getProperty("type.driver");
+        if (driver != null && !driver.isEmpty()) {
+            return driver;
+        }
+        return get("type.driver");
     }
 
 }
